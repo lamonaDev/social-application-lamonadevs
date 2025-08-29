@@ -29,7 +29,8 @@ export default function NavComponent() {
   const { userState, setUserState } = useContext(MainUserContext);
   function handleLogOut() {
     setUserState(null)
-    window.localStorage.removeItem("token")
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("id");
     toast.success("log out successfully!")
   }
   return (

@@ -35,7 +35,6 @@ export default function AddEditePost({ getAllPosts }) {
         <div className="my-3 bg-gray-50 p-2 rounded-xl">
             {
                 isShow ? <div>
-
                     <Textarea
                         isClearable
                         className=''

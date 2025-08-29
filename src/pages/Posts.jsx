@@ -38,7 +38,6 @@ export default function Posts() {
         // retryDelay:2000, 
         // gcTime:2000pp
     })
-
     if (isLoading) {
         return <Loader typeOfLoader="Loading Posts" />
     }

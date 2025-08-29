@@ -12,6 +12,7 @@ import { MainUserContext } from "../context/UserAuth";
 import LoaderPage from "./Loader";
 import FadeContent from "../components/ui/animation/BlurFadeContent/BlurFadeContent";
 export default function Signup() {
+    const { userData } = useContext(MainUserContext)
     const {setUserState, userState} = useContext(MainUserContext)
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState(null);
@@ -42,7 +43,7 @@ export default function Signup() {
                 if (responce.data.message === "success") {
                     toast.success("login successfully")
                     setUserState(true);
-                    window.localStorage.setItem("token", responce.data.token); 
+                    window.localStorage.setItem("token", responce.data.token);
                     setUserState(responce.data.token);
                     navigate("/"); //? redirect the user to the login page after successful registration
                 } else {

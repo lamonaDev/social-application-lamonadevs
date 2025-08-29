@@ -1,13 +1,16 @@
 import userPlaceHolder from "/user.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaComments } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
 import { Button } from "@heroui/react";
 import FadeContent from "../ui/animation/BlurFadeContent/BlurFadeContent";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import toast from "react-hot-toast";
+import Modal from "../Modal/Modal";
+import { MainUserContext } from "../../context/UserAuth";
 export default function Card({ post, from }) {
+    const { userData } = useContext(MainUserContext);
     const [visibleComments, setvisibleComments] = useState(2);
     const navigate = useNavigate();
     return (
@@ -19,7 +22,7 @@ export default function Card({ post, from }) {
             :<></>
         }
         <div className="card-header flex flex-row gap-6 items-center border-b-1 p-3">
-            <img src={post.user?.photo} className="size-15 rounded-full shadow" />
+            <img src={post.user?.photo} className="size-15 rounded-full shadow-2xl border-1" />
             <div className="card-header-info">
                     <h3 className="card-user-name">{ post.user?.name }</h3>
                     <p className="card-post-date">{ post.createdAt?.split('T')[0] }</p>
