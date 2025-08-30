@@ -4,6 +4,7 @@ export const MainUserContext = createContext();
 export default function UserAuthContext({ children }) {
     const [userState, setUserState] = useState(window.localStorage.getItem("token") || '');
     const [userData, setUserData] = useState(null);
+    const [userId, setUserId] = useState("");
     const [loadUserProfile, setLoadUserProfile] = useState(false)
     function getLoggedUser() {
         axios(
@@ -15,14 +16,15 @@ export default function UserAuthContext({ children }) {
                 }
             }
         ).then((response) => {
-            setUserData(response.data.user);
+            setUserData(response?.data?.user);
+            setUserId(response?.data?.user?._id);
         })
     }
     useEffect(() => {
         getLoggedUser();
     }, [])
     return (
-        <MainUserContext.Provider value={{userState, setUserState, userData, loadUserProfile, setLoadUserProfile}}>
+        <MainUserContext.Provider value={{userState, setUserState, userData, loadUserProfile, setLoadUserProfile, userId}}>
             { children }
         </MainUserContext.Provider>
     )

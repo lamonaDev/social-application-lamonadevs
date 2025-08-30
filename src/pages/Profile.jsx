@@ -8,16 +8,17 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import AddEditePost from "../components/AddEditPostComponent/addEdit"
 export default function Profile() {
-    const { userState, userData } = useContext(MainUserContext);
+    const { userState, userData, userId } = useContext(MainUserContext);
     const [userPosts, setUserPosts] = useState(null);
     const [loading, isLoading] = useState(false);
+    const id = String(userId);
     function getUserPosts() {
         isLoading(true)
         axios
-        .get(`https://linked-posts.routemisr.com/users/664bcf3e33da217c4af21f00/posts?limit=50`,
-            { headers: {token: userState} }
+        .get(`https://linked-posts.routemisr.com/users/${userData?._id}/posts?limit=10`,
+            { headers: {token: userState, "Content-Type":"application/json"} }
         ).then((res) => {
-            setUserPosts(res.data.posts);
+            setUserPosts(res?.data?.posts);
         }).catch((error) => {
             toast.error(error.message);
         }).finally(() => {
