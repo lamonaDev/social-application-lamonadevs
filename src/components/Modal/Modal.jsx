@@ -53,7 +53,7 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
       <FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
       <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className="max-h-[90vh]">
+        <ModalContent>
           {(onClose) => (
             <>
             <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={300}>
