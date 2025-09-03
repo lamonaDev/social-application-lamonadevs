@@ -11,7 +11,7 @@ import { Button } from "@heroui/react"
 export default function PostDetails() {
     useEffect(() => { document.title = 'Post Details' }, [])
     let { id } = useParams()
-    const { userState } = useContext(MainUserContext)
+    const { userState, userId } = useContext(MainUserContext)
     // function getSinglePost() {
     //     axios.get(`https://linked-posts.routemisr.com/posts/${id}`, {
 
@@ -40,7 +40,7 @@ export default function PostDetails() {
                 </>
                 :
                 <div className="mx-5">
-                    {data && <Card post={data.post} from='details' />}
+                    {data && <Card post={data.post} from='details' isUserPost={data?.post?.user?._id === userId} />}
                 </div>
             }
         </>

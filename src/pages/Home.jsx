@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { MainUserContext } from "../context/UserAuth"
 import { Button } from "@heroui/react";
 import { NavLink } from "react-router-dom";
@@ -18,6 +18,9 @@ export default function Home() {
     const { userState, userData } = useContext(MainUserContext);
     console.log(userData);
     const plainText = `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis, doloremque maxime! Quasi saepe ducimus, assumenda necessitatibus rerum voluptate doloremque eaque, cupiditate libero officiis et sapiente aliquam eius voluptatibus ratione sit pariatur sed temporibus tenetur. Commodi sunt velit voluptatum quae placeat!`
+  useEffect(() => {
+    window.document.title = `${userState ? "Home" : "LogIn | Sign-up"}`;
+    })
   return (
       <>
         <FadeContent

@@ -46,12 +46,13 @@ export default function Posts() {
         return toast.error(error.message);
     }
     return (
-        <main className="md:w-1/2 p-4 mx-auto ">
+        <main className="md:w-[70%] p-4 mx-auto">
             <AddEditePost getAllPosts={refetch} />
             {data?.data?.posts.length ? <>
                 {data?.data?.posts.map((post) => {
+                    const KeyValue = post._id;
                     return <div key={post._id}>
-                        <Card post={post} />
+                        <Card post={post} key={post?._id} KeyValue={post?._id} isUserPost={post?.user?._id === userData?._id}/>
                     </div>
                 })}
             </>

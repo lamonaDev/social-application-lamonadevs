@@ -3,7 +3,7 @@ import axios from "axios"
 import { useState } from "react"
 import toast from "react-hot-toast"
 
-export default function AddEditePost({ getAllPosts }) {
+export default function AddEditePost({ getAllPosts, onPostAdded }) {
     const [isShow, setIsShow] = useState(false)
     const [body, setBody] = useState('')
     const [img, setImg] = useState('')
@@ -23,7 +23,8 @@ export default function AddEditePost({ getAllPosts }) {
                 setImg('')
                 setBody('')
                 setIsShow(false)
-                getAllPosts()
+                getAllPosts();
+                onPostAdded();
             }
         })
     }
@@ -32,7 +33,7 @@ export default function AddEditePost({ getAllPosts }) {
     }
 
     return (
-        <div className="my-3 bg-gray-50 p-2 rounded-xl">
+        <div className="my-3 bg-gray-50 p-2 rounded-xl max-w-[600px] mx-auto">
             {
                 isShow ? <div>
                     <Textarea
