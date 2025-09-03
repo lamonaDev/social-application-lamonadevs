@@ -52,7 +52,7 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
                 {
                   isEdit
                   ? <div className="w-full border-1 p-1 rounded-2xl"><AddEditePost/></div>
-                    : <><Card post={currentPost} />{ post?._id }</>
+                    : <><Card post={currentPost} /></>
                 }
               </ModalBody>
               <ModalFooter className="flex flex-row justify-evenly">
