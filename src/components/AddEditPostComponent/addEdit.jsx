@@ -13,9 +13,12 @@ export default function AddEditePost({ getAllPosts, onPostAdded, isEdit, postId 
         const formDataToEdit = new FormData();
         postEditBody && formDataToEdit.append("body", postEditBody);
         postEditImage && formDataToEdit.append("image", postEditImage);
-        if (!postEditBody) {
-            return toast.error("Provide a text to edit the post")
-        }
+        // if (!postEditBody) {
+        //     return toast.error("Provide a text | image to edit the post")
+        // }
+        // if (img !== '') {
+        //     return toast.error("Provide a text | image to edit the post");
+        // }
         axios.put(`https://linked-posts.routemisr.com/posts/${postId}`, formDataToEdit ,{ headers: { token: userState}})
         .then((res) => {
             if (res?.data?.message === "success") {
@@ -67,7 +70,8 @@ export default function AddEditePost({ getAllPosts, onPostAdded, isEdit, postId 
                         // eslint-disable-next-line no-console
                         onClear={() => console.log("textarea cleared")}
                     />
-                    {img && <img src={URL.createObjectURL(img)} className="h-40 w-full rounded-2xl object-cover" alt="" />
+                    {
+                        img && <img src={URL.createObjectURL(img)} className="h-40 w-full rounded-2xl object-cover" alt="" />
                     }
                     <div className="flex justify-between items-center">
                         <div class="rounded-md border border-gray-100 bg-white p-4">
