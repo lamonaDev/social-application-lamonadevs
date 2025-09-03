@@ -1,12 +1,33 @@
 import { Button, Textarea } from "@heroui/react"
 import axios from "axios"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import { MainUserContext } from "../../context/UserAuth"
 
-export default function AddEditePost({ getAllPosts, onPostAdded }) {
+export default function AddEditePost({ getAllPosts, onPostAdded, isEdit, postId }) {
+    const { userState } = useContext(MainUserContext);
     const [isShow, setIsShow] = useState(false)
     const [body, setBody] = useState('')
     const [img, setImg] = useState('')
+    function editPost(postId, postEditBody, postEditImage) {
+        const formDataToEdit = new FormData();
+        postEditBody && formDataToEdit.append("body", postEditBody);
+        postEditImage && formDataToEdit.append("image", postEditImage);
+        if (!postEditBody) {
+            return toast.error("Provide a text to edit the post")
+        }
+        axios.put(`https://linked-posts.routemisr.com/posts/${postId}`, formDataToEdit ,{ headers: { token: userState}})
+        .then((res) => {
+            if (res?.data?.message === "success") {
+                toast.success("Post edited successfully!")
+                setImg("");
+                setBody("");
+                setIsShow(false);
+                getAllPosts();
+                onPostAdded();
+            }
+        })
+    }
     function addPost() {
         const formData = new FormData()
         body && formData.append('body', body)
@@ -31,11 +52,10 @@ export default function AddEditePost({ getAllPosts, onPostAdded }) {
     function handleUploadImage(e) {
         setImg(e.target.files[0]);
     }
-
     return (
         <div className="my-3 bg-gray-50 p-2 rounded-xl max-w-[600px] mx-auto">
             {
-                isShow ? <div>
+                isShow || isEdit ? <div>
                     <Textarea
                         isClearable
                         className=''
@@ -43,11 +63,11 @@ export default function AddEditePost({ getAllPosts, onPostAdded }) {
                         placeholder=" What is in Your mind?"
                         variant="bordered"
                         value={body}
-                        onChange={(e) => { setBody(e.target.value) }}
+                        onChange={(e) => { setBody(e.target.value)}}
                         // eslint-disable-next-line no-console
                         onClear={() => console.log("textarea cleared")}
                     />
-                    {img && <img src={URL.createObjectURL(img)} className="h-40 w-full" alt="" />
+                    {img && <img src={URL.createObjectURL(img)} className="h-40 w-full rounded-2xl object-cover" alt="" />
                     }
                     <div className="flex justify-between items-center">
                         <div class="rounded-md border border-gray-100 bg-white p-4">
@@ -62,8 +82,15 @@ export default function AddEditePost({ getAllPosts, onPostAdded }) {
                             }} />
                         </div>
 
-
-                        <div className="buttons">
+                        {
+                            isEdit 
+                            ?
+                            <>
+                                <Button color="success" variant="flat" onClick={() => editPost(postId, body, img)}>Done</Button>
+                            </> 
+                            :
+                            <>
+                                <div className="buttons">
                             <Button size="sm" variant="bordered" className="mx-2" onClick={() => {
                                 setIsShow(false)
                                 setImg('')
@@ -72,7 +99,9 @@ export default function AddEditePost({ getAllPosts, onPostAdded }) {
                             {console.log(Boolean(img))
                             }
                             <Button size="sm" color="primary" onClick={addPost} isDisabled={Boolean(!body.trim())}>Post</Button>
-                        </div>
+                                </div>
+                            </>
+                        }
                     </div>
 
                 </div>

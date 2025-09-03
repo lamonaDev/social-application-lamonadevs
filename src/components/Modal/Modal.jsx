@@ -19,6 +19,9 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
     const [backdrop, setBackdrop] = React.useState("opaque");
       const { userState } = useContext(MainUserContext);
         const [currentPost, setCurrentPost] = useState(null);
+        // const [postEditBody, setPostEditBody] = useState("");
+        // const [postEditImage, setPostEditImage] = useState("");
+        const [id, setPostId] = useState("");
       const [modalPlacement, setModalPlacement] = useState("auto");
     const [isEdit, setIsEdit] = useState(false);
   const handleOpen = (backdrop) => {
@@ -34,16 +37,22 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
     axios.delete(`https://linked-posts.routemisr.com/posts/${postId}`, { headers: { "Content-Type": "application/json", token: userState } })
     .then(() => toast.success("Post Deleted Successfully!"))
   }
-  function toggleIsEdit() { return !isEdit }
-  useEffect(() => {
+  // function editPost(postId, postEditBody, postEditImage) {
+  //   const formDataToEdit = new FormData();
+  //   postEditBody && formDataToEdit.append(postEditBody);
+  //   postEditImage && formDataToEdit.append(postEditImage);
+  //   axios.put(`https://linked-posts.routemisr.com/posts/${postId}`, formDataToEdit ,{ headers: { token: userState}})
+  // }
+  function toggleIsEdit() { return !isEdit }  useEffect(() => {
     if (post?._id) {
       getCurrentPost(post?._id);
+      setPostId(post?._id);
     }
   }, [post?._id]);
   return (
     <>
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
-      <Modal plcaement={modalPlacement} backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal plcaement={"center"} backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -51,12 +60,12 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
               <ModalBody>
                 {
                   isEdit
-                  ? <div className="w-full border-1 p-1 rounded-2xl"><AddEditePost/></div>
+                  ? <div className="w-full border-1 p-1 rounded-2xl"><AddEditePost isEdit={isEdit} postId={post?._id} /></div>
                     : <><Card post={currentPost} /></>
                 }
               </ModalBody>
-              <ModalFooter className="flex flex-row justify-evenly">
-                <Button color="danger" variant="light" onPress={onClose} onClick={() => setIsEdit(toggleIsEdit())}>
+              <ModalFooter className="flex flex-row justify-between">
+                <Button color="danger" variant="light" onPress={onClose} onClick={() => setIsEdit(false)}>
                   Close
                 </Button>
                 <div className="actions flex flex-row gap-1.5">
@@ -64,13 +73,13 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
                   isEdit
                   ? 
                   <>
-                    <Button color="success" onClick={() => setIsEdit(toggleIsEdit())}>Save Editing</Button>
-                    <Button color="danger" onClick={() => setIsEdit(toggleIsEdit())}>Cancel Editing</Button>
+                    {/* <Button color="success" onClick={() => setIsEdit(toggleIsEdit())}>Save Editing</Button>
+                    <Button color="danger" onClick={() => setIsEdit(toggleIsEdit())}>Cancel Editing</Button> */}
                   </>
                   :
                   <>
-                    <Button color="warning" onClick={() => setIsEdit(toggleIsEdit())}>Edit</Button>
-                    <Button color="danger" onPress={onClose} onClick={() => { if (post?._id) { deleteCurrentPost(post?._id) } }}>Delete</Button>
+                    <Button variant="flat" color="success" onClick={() => { setIsEdit(toggleIsEdit());}}>Edit</Button>
+                    <Button variant="flat" color="danger" onPress={onClose} onClick={() => { if (post?._id) { deleteCurrentPost(post?._id) } }}>Delete</Button>
                   </>
                 }
                 </div>
