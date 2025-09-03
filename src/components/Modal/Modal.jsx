@@ -53,13 +53,13 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
       <FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
       <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className="max-h-[700px] overflow-scroll">
           {(onClose) => (
             <>
-            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={300}>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={200}>
               <ModalHeader className="flex flex-col gap-1">{ useOfModal }</ModalHeader>
             </FadeContent>
-            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={500}>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={300}>
               <ModalBody>
                 {
                   isEdit
@@ -76,7 +76,7 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
                 }
               </ModalBody>
             </FadeContent>
-            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={700}>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={400}>
               <ModalFooter className="flex flex-row justify-between">
                 <Button color="danger" variant="light" onPress={onClose} onClick={() => setIsEdit(false)}>
                   {isEdit ? "Cancel Edit" : "Close"}
