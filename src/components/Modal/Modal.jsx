@@ -14,6 +14,7 @@ import axios from "axios";
 import { MainUserContext } from "../../context/UserAuth";
 import toast from "react-hot-toast";
 import AddEditePost from "../AddEditPostComponent/addEdit";
+import FadeContent from "../ui/animation/BlurFadeContent/BlurFadeContent";
 export default function ModalComponent({useOfModal, post, KeyValue}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [backdrop, setBackdrop] = React.useState("opaque");
@@ -52,21 +53,35 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
   return (
     <>
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
+      <FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
       <Modal plcaement={"center"} backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={300}>
               <ModalHeader className="flex flex-col gap-1">{ useOfModal }</ModalHeader>
+            </FadeContent>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={500}>
               <ModalBody>
                 {
                   isEdit
-                  ? <div className="w-full border-1 p-1 rounded-2xl"><AddEditePost isEdit={isEdit} postId={post?._id} /></div>
-                    : <><Card post={currentPost} /></>
+                  ? 
+                    <div className="w-full border-1 p-1 rounded-2xl">
+                      <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0}>
+                        <AddEditePost isEdit={isEdit} postId={post?._id} />
+                      </FadeContent>
+                    </div>
+                  :
+                  <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0}>
+                  <Card post={currentPost} />
+                  </FadeContent>
                 }
               </ModalBody>
+            </FadeContent>
+            <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={700}>
               <ModalFooter className="flex flex-row justify-between">
                 <Button color="danger" variant="light" onPress={onClose} onClick={() => setIsEdit(false)}>
-                  Close
+                  {isEdit ? "Cancel Edit" : "Close"}
                 </Button>
                 <div className="actions flex flex-row gap-1.5">
                 {
@@ -84,10 +99,12 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
                 }
                 </div>
               </ModalFooter>
+            </FadeContent>
             </>
           )}
         </ModalContent>
       </Modal>
+      </FadeContent>
     </>
   );
 }
