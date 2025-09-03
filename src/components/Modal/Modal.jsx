@@ -23,11 +23,9 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
         // const [postEditBody, setPostEditBody] = useState("");
         // const [postEditImage, setPostEditImage] = useState("");
         const [id, setPostId] = useState("");
-      const [modalPlacement, setModalPlacement] = useState("auto");
     const [isEdit, setIsEdit] = useState(false);
   const handleOpen = (backdrop) => {
       setBackdrop(backdrop);
-      setModalPlacement("center");
       onOpen();
     };
   function getCurrentPost(postId) {
@@ -54,8 +52,8 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
     <>
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
       <FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
-      <Modal plcaement={"center"} backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+      <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent className="max-h-[90vh]">
           {(onClose) => (
             <>
             <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0} delay={300}>
