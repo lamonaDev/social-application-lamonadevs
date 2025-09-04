@@ -61,6 +61,7 @@ export default function CommentModal({ postId }) {
                             label="Comment"
                             type="text"
                                 {...register("content", { required: "Comment is required", })}
+                                    isClearable
                                 id="commentInput"
                         isInvalid={!!errors.content}
                     errorMessage={errors.content?.message}
