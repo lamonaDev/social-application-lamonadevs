@@ -1,12 +1,14 @@
 {
     "routes": [
-        {
-            "src": "/home",
-            "dest": "/"
-        },
-        {
-            "src": "/profile",
-            "dest": "/"
-        }
+        { "src": "/home", "dest": "/" },
+        { "src": "/", "dest": "/" },
+        { "src": "/posts", "dest": "/" },
+        { "src": "/posts/:id", "dest": "/" },
+        { "src": "/signup", "dest": "/" },
+        { "src": "/login", "dest": "/" },
+        { "src": "*", "dest": "/" },
+        { "src": "/loader", "dest": "/" },
+        { "src": "/card", "dest": "/" },
+        { "src": "/profile", "dest": "/" }
     ]
 }
