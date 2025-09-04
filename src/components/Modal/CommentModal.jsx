@@ -15,31 +15,45 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export default function CommentModal({ postId }) {
+export default function CommentModal({ postId, isEdit, commentId }) {
     const { userState } = useContext(MainUserContext);
     const { register, handleSubmit, formState: { errors }, } = useForm({ defaultValues: { content: "" }, });
     const { mutate, isLoading } = useMutation({
     mutationFn: async (formData) => {
-        const response = await axios.post("https://linked-posts.routemisr.com/comments",
-        { content: formData.content, post: postId , },
-        {
-            headers: {
-                "Content-Type": "application/json",
-                token: userState,
-            },
+        if (!isEdit) {
+            const response = await axios.post("https://linked-posts.routemisr.com/comments",
+            { content: formData.content, post: postId , },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userState,
+                },
+            }
+        );
+        return response?.data;
+        } else {
+            if (!commentId) return toast.error("There is no comment id")
+            const editCommentResponse = await axios.put(`https://linked-posts.routemisr.com/comments/${commentId}`,
+                { content: formData.content },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: userState
+                    }
+                }
+            )
+            return editCommentResponse?.data;
         }
-    );
-    return response?.data;
     },
-    onSuccess: () => { toast.success("Comment added successfully!");},
+    onSuccess: () => { toast.success(`${isEdit ? "Comment Edited Successfully!" : "Comment added successfully!"}`);},
     onError: (error) => {
-        toast.error( `Error adding comment: ${ error.response?.data?.message || error.message }` );
+        toast.error( `Error ${isEdit ? "Editing" : "Adding"} comment: ${ error.response?.data?.message || error.message }` );
         },
     });
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
     <>
-        <Button onPress={onOpen} variant="flat" color="primary">Add Comment</Button>
+            <Button onPress={onOpen} variant="flat" size={isEdit ? "sm" : "md"} color={isEdit ? "warning" : "primary"}>{ isEdit ? "Edit" : "Add a Comment" }</Button>
         <Modal
             backdrop="blur"
                 placement="center"
@@ -52,15 +66,15 @@ export default function CommentModal({ postId }) {
         <ModalContent>
         {(onClose) => (
             <>
-                <ModalHeader className="flex flex-col gap-1">Add a comment</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">{ isEdit ? "Edit Comment" : "Add a comment" }</ModalHeader>
                 <ModalBody>
                 <form onSubmit={handleSubmit((data) => mutate(data) )}>
                 <Input
                     color="primary"
                         variant="flat"
-                            label="Comment"
+                            label={isEdit ? "Edit Comment" : "Add Comment"}
                             type="text"
-                                {...register("content", { required: "Comment is required", })}
+                                {...register("content", { required: `Comment is required to ${isEdit ? "Edit" : "Add"}` })}
                                     isClearable
                                 id="commentInput"
                         isInvalid={!!errors.content}
@@ -73,7 +87,7 @@ export default function CommentModal({ postId }) {
                             variant="flat"
                         isLoading={isLoading}
                     >
-                    Add
+                    {isEdit ? "Edit" : "Add"}
                     </Button>
                     <Button color="danger" variant="flat" onPress={onClose}>Cancel</Button>
                 </ModalFooter>

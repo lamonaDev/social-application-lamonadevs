@@ -32,17 +32,17 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
             :<></>
         }
         
-        <div className="card-header flex flex-row gap-6 items-center border-b-1 p-3">
+        <div className="card-header flex flex-row gap-6 items-center border-b-1 p-2">
             <img src={post.user?.photo} className="size-15 rounded-full shadow-2xl border-1" />
             <div className="card-header-info">
                     <h3 className="card-user-name">{ post.user?.name }</h3>
                     <p className="card-post-date">{ post.createdAt?.split('T')[0] }</p>
             </div>
         </div>
-        <div className="card-content p-2">
+        <div className="card-content p-0">
                 <h3 className="post-title text-xl ms-1 my-3">{ post.body }</h3>
                 {
-                    post.image && <img src={post.image} alt="post image" className="w-[100%] min-h-[250px] object-cover size-10 border-1 rounded-xl" />
+                    post.image && <img src={post.image} alt="post image" className="w-[100%] min-h-[300px] object-cover size-10 border-1 rounded-xl" />
                 }
         </div>
         <div className="card-post-options">
@@ -72,7 +72,7 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
                     ?
                     <>
                         <div className="post-comment-acitons flex flex-row gap-2">
-                            <Button size="sm" variant="flat" color="warning">Edit</Button>
+                            <CommentModal isEdit={true} commentId={comment?._id}/>
                             <Button size="sm" variant="flat" color="danger" onClick={() => DeleteComment(comment?._id)}>Delete</Button>
                         </div>
                     </>
@@ -101,7 +101,7 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
                     ?
                     <>
                         <div className="post-comment-acitons flex flex-row gap-2">
-                            <Button size="sm" variant="flat" color="warning">Edit</Button>
+                            <CommentModal isEdit={true} commentId={comment?._id}/>
                             <Button size="sm" variant="flat" color="danger" onClick={() => DeleteComment(comment?._id)} >Delete</Button>
                         </div>
                     </>
