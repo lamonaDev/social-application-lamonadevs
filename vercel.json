@@ -3,6 +3,10 @@
         {
             "src": "/home",
             "dest": "/"
+        },
+        {
+            "src": "/profile",
+            "dest": "/"
         }
     ]
 }
