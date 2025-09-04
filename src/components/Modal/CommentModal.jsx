@@ -44,6 +44,7 @@ export default function CommentModal({ postId }) {
             backdrop="blur"
                 placement="center"
                     isKeyboardDismissDisabled={true}
+                        className="mx-2.5"
                     isDismissable={false}
                 isOpen={isOpen}
             onOpenChange={onOpenChange}
