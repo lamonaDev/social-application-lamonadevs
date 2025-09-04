@@ -1,7 +1,6 @@
 {
   "routes": [
     {
-      "handle": "rewrite",
       "src": "/(.*)",
       "dest": "/"
     }
