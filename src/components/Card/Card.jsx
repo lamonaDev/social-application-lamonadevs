@@ -72,7 +72,7 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
                     ?
                     <>
                         <div className="post-comment-acitons flex flex-row gap-2">
-                            <Button size="sm" variant="flat" color="warning" onClick={() => DeleteComment(comment?._id)}>Edit</Button>
+                            <Button size="sm" variant="flat" color="warning">Edit</Button>
                             <Button size="sm" variant="flat" color="danger" onClick={() => DeleteComment(comment?._id)}>Delete</Button>
                         </div>
                     </>
@@ -101,8 +101,8 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
                     ?
                     <>
                         <div className="post-comment-acitons flex flex-row gap-2">
-                            <Button size="sm" variant="flat" color="warning" onClick={() => DeleteComment(comment?._id)}>Edit</Button>
-                            <Button size="sm" variant="flat" color="danger">Delete</Button>
+                            <Button size="sm" variant="flat" color="warning">Edit</Button>
+                            <Button size="sm" variant="flat" color="danger" onClick={() => DeleteComment(comment?._id)} >Delete</Button>
                         </div>
                     </>
                     :
