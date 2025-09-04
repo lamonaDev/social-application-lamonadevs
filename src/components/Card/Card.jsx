@@ -10,9 +10,18 @@ import toast from "react-hot-toast";
 import Modal from "../Modal/Modal";
 import { MainUserContext } from "../../context/UserAuth";
 import ModalComponent from "../Modal/Modal";
+import CommentModal from "../Modal/CommentModal";
+import axios from "axios";
 export default function Card({ post, from, isUserPost, KeyValue, key}) {
-    const { userData } = useContext(MainUserContext);
+    const { userData, userId, userState } = useContext(MainUserContext);
     const [visibleComments, setvisibleComments] = useState(2);
+    async function DeleteComment(commentId) {
+        return await axios.delete(`https://linked-posts.routemisr.com/comments/${commentId}`,
+            {headers: {token: window.localStorage.getItem("token")}}
+        )
+        .then(() => {toast.success("Comment Deleted Sucessfully!")})
+        .catch(() => {toast.error("Error in deleting comment")})
+    }
     const navigate = useNavigate();
     return (
     <FadeContent className="mx-auto" blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
@@ -41,44 +50,77 @@ export default function Card({ post, from, isUserPost, KeyValue, key}) {
                         <h2 className="comments flex items-center gap-2 cursor-pointer" onClick={(e) => { console.log(e.target) }}><FaComments/>{`(${post?.comments?.length}) comments`}</h2>
                 <h2 className="share flex items-center gap-2 cursor-pointer" onClick={(e) => {console.log(e.target)}}><FaShare/>{"Share"}</h2>
             </div>
+            <CommentModal postId={post?._id} />
                 {/*post comments*/}
                 {post?.comments?.length > 0 ? (
         post?.comments?.length > 2 ? (
             post?.comments?.slice(0, visibleComments).map((comment) => (
-            <div key={comment?.id} className="post-comment flex flex-row items-center gap-4 my-4 p-3 border-1 rounded-2xl">
-                    <img
+            <div key={comment.id} className="post-comment flex flex-row items-center justify-between gap-4 my-4 p-3 border-1 rounded-2xl">
+                <div className="post-comment-content flex flex-row gap-3 items-center">
+                <img
                     onError={(e) => e.target.src = userPlaceHolder}
-                    src={comment?.commentCreator?.photo}
-                    alt=""
-                    className="post-comment-img size-8 rounded-full border-1"
+                        src={comment?.commentCreator?.photo}
+                    className="post-comment-img size-8 rounded-full"
                 />
-                <div className="post-comment-content">
-                    <h3 className="post-comment-name text-sm font-bold">{comment?.commentCreator?.name}</h3>
-                    <p className="post-comment-content text-sm">{comment?.content}</p>
+                    <div className="post-comment-data">
+                        <h3 className="post-comment-name text-sm font-bold">{comment?.commentCreator?.name}</h3>
+                        <p className="post-comment-content text-sm">{comment?.content}</p>
+                    </div>
                 </div>
+                {
+                    isUserPost
+                    ?
+                    <>
+                        <div className="post-comment-acitons flex flex-row gap-2">
+                            <Button size="sm" variant="flat" color="warning" onClick={() => DeleteComment(comment?._id)}>Edit</Button>
+                            <Button size="sm" variant="flat" color="danger" onClick={() => DeleteComment(comment?._id)}>Delete</Button>
+                        </div>
+                    </>
+                    :
+                    <>
+                    </>
+                }
             </div>
             ))
         ) : (
         post.comments.map((comment) => (
-            <div key={comment.id} className="post-comment flex flex-row items-center gap-4 my-4 p-3 border-1 rounded-2xl">
+            <div key={comment.id} className="post-comment flex flex-row items-center justify-between gap-4 my-4 p-3 border-1 rounded-2xl">
+                <div className="post-comment-content flex flex-row gap-3 items-center">
                 <img
-                onError={(e) => e.target.src = userPlaceHolder}
-                src={comment?.commentCreator?.photo}
-                className="post-comment-img size-8 rounded-full"
+                    onError={(e) => e.target.src = userPlaceHolder}
+                        src={comment?.commentCreator?.photo}
+                    className="post-comment-img size-8 rounded-full"
                 />
-                <div className="post-comment-content">
-                    <h3 className="post-comment-name text-sm font-bold">{comment?.commentCreator?.name}</h3>
-                    <p className="post-comment-content text-sm">{comment?.content}</p>
+                    <div className="post-comment-data">
+                        <h3 className="post-comment-name text-sm font-bold">{comment?.commentCreator?.name}</h3>
+                        <p className="post-comment-content text-sm">{comment?.content}</p>
+                    </div>
                 </div>
+                {
+                    isUserPost
+                    ?
+                    <>
+                        <div className="post-comment-acitons flex flex-row gap-2">
+                            <Button size="sm" variant="flat" color="warning" onClick={() => DeleteComment(comment?._id)}>Edit</Button>
+                            <Button size="sm" variant="flat" color="danger">Delete</Button>
+                        </div>
+                    </>
+                    :
+                    <>
+                    </>
+                }
             </div>
         ))
     )
 ) : (
-        <p className="text-sm ">No Comments</p>
+        <></>
     )}
     {
         from === "details" ? <Button as={NavLink} onClick={() => {visibleComments > post.comments.length ? toast.error("No more comments"): setvisibleComments(visibleComments + 2)}} variant="flat" color="primary" className="mt-3 w-full">See More</Button>
-        : <><Button as={NavLink} onClick={() => navigate(`${post._id}`)} variant="flat" color="primary" className="mt-3 w-full">See Post Details</Button></>
+        : <>{ from === "edit" ? <></> : <Button as={NavLink} onClick={() => navigate(`${post._id}`)} variant="flat" color="primary" className="mt-3 w-full">See Post Details</Button> }</>
+    }
+    {
+        from === "details" && visibleComments >= 4 ? <Button as={NavLink} onClick={() => {visibleComments <= 0 ? toast.error("See More Comments"): setvisibleComments(visibleComments - 2)}} variant="flat" color="primary" className="mt-3 w-full">See Less</Button> :<></>
     }
     {
         isUserPost ? <ModalComponent useOfModal={"Post Actions"} post={post} KeyValue={KeyValue} /> : <></>

@@ -53,6 +53,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: '/posts', element: userState ? <Posts/>: <NotFound typeOfNotFound={"Please Register/Login"} />, children: [] },
         { path: 'posts/:id', element: userState ? <PostDetails /> : <NotFound typeOfNotFound="Please Register/Login" /> },
+        { path: 'profile/:id', element: userState ? <PostDetails /> : <NotFound typeOfNotFound="Please Register/Login" /> },
         { path: '/login', element: <Login /> },
         { path: '/signup', element: <Signup /> },
         { path: '/profile', element: userState ? <Profile/>: <NotFound typeOfNotFound={"Please Register/Login"} /> }

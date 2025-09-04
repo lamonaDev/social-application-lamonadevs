@@ -15,7 +15,7 @@ import { MainUserContext } from "../../context/UserAuth";
 import toast from "react-hot-toast";
 import AddEditePost from "../AddEditPostComponent/addEdit";
 import FadeContent from "../ui/animation/BlurFadeContent/BlurFadeContent";
-export default function ModalComponent({useOfModal, post, KeyValue}) {
+export default function ModalComponentForPostAction({useOfModal, post, KeyValue}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [backdrop, setBackdrop] = React.useState("opaque");
       const { userState } = useContext(MainUserContext);
@@ -52,7 +52,7 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
     <>
       <Button onPress={() => handleOpen("blur")} variant="flat" color="primary" size="md" className="mt-3 w-full">{ useOfModal }</Button>
       <FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
-      <Modal backdrop={backdrop} isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal backdrop={backdrop} isOpen={isOpen} isKeyboardDismissDisabled={true} isDismissable={false} onOpenChange={onOpenChange}>
         <ModalContent className="max-h-[700px] overflow-scroll">
           {(onClose) => (
             <>
@@ -71,7 +71,7 @@ export default function ModalComponent({useOfModal, post, KeyValue}) {
                     </div>
                   :
                   <FadeContent blur={true} duration={600} easing="ease-out" initialOpacity={0}>
-                  <Card post={currentPost} />
+                  <Card post={currentPost} from={"edit"}/>
                   </FadeContent>
                 }
               </ModalBody>
