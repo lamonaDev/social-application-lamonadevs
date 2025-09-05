@@ -4,8 +4,42 @@ import userPlaceHolder from "/user.svg";
 import { Input } from "@heroui/react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 export default function ProfileCard() {
-    const { userData, userState } = useContext(MainUserContext);
+    const { userData: contextUserData, userState, userId } = useContext(MainUserContext);
+    const queryClient = useQueryClient();
+    const { data: userData } = useQuery({
+        queryKey: ['userProfile'],
+        queryFn: async () => {
+        const response = await axios.get(`https://linked-posts.routemisr.com/users/profile-data`, {
+            headers: { token: userState }
+        });
+        return response?.data?.user;
+        },
+        initialData: contextUserData,
+        enabled: !!contextUserData,
+    });
+    const mutation = useMutation({
+        mutationFn: async (file) => {
+        const formData = new FormData();
+        formData.append("photo", file);
+        const response = await axios.put(`https://linked-posts.routemisr.com/users/upload-photo`, formData, {
+            headers: {
+            "Content-Type": "multipart/form-data",
+            token: userState,
+            },
+        });
+            return response.data;
+        },
+        onSuccess: () => {
+            toast.success("Avatar updated");
+            queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
     return (
         <>
     {userData && (
@@ -23,18 +57,7 @@ export default function ProfileCard() {
             onChange={(e) => {
             const file = e.target.files[0];
             if (file) {
-            const formData = new FormData();
-            formData.append("photo", file);
-            axios.put(`https://linked-posts.routemisr.com/users/upload-photo`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    token: userState, 
-                },
-            })
-            .then(() => {
-                toast.success("Avatar updated");
-            })
-            .catch((error) => toast.error(error.message))
+                mutation.mutate(file);
             }
             }}
         />
